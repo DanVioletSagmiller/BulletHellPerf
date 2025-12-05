@@ -7,7 +7,8 @@ public class ShotSystemL3 : MonoBehaviour
     public static ShotSystemL3 Instance;
     public float ShotSpeed = 3f;
     public Mesh ShotMesh;
-    public Material ShotMaterial;   
+    public Material ShotMaterial;
+    public Vector3 Scale = Vector3.one * 0.5f;
 
     public struct ShotData
     {
@@ -48,7 +49,7 @@ public class ShotSystemL3 : MonoBehaviour
             Velocity = rotation * Vector3.forward * ShotSpeed
         };
 
-        ShotTransforms[Count] = Matrix4x4.TRS(position, rotation, Vector3.one);
+        ShotTransforms[Count] = Matrix4x4.TRS(position, rotation, Scale);
 
         Count++;
         Demo.Instance.SetPeekObjects(Count);

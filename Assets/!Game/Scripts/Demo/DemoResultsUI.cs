@@ -124,7 +124,7 @@ public class DemoResultsUI : MonoBehaviour
         vLayout.padding = new RectOffset(4, 4, 4, 4);
 
         // Title
-        var titleGO = CreateText("Title", rootRect, 14, FontStyle.Bold, TextAnchor.MiddleLeft);
+        var titleGO = CreateText("Title", rootRect, 12, FontStyle.Normal, TextAnchor.MiddleLeft);
 
         // CPU label + curve
         var cpuLabelGO = CreateText("CPU_Label", rootRect, 12, FontStyle.Normal, TextAnchor.MiddleLeft);
@@ -200,6 +200,13 @@ public class DemoResultsUI : MonoBehaviour
             e.title.text = $"{r.Name}  (Peak Objects: {r.PeekObjects})";
             e.cpuLabel.text = $"CPU Avg: {r.AverageCPU:0.00} ms";
             e.gpuLabel.text = $"GPU Avg: {r.AverageGPU:0.00} ms";
+
+            // DEBUG:
+            Debug.Log(
+                $"Entry '{kv.Key}': titleGO={e.title?.gameObject.name}, " +
+                $"active={e.title?.gameObject.activeInHierarchy}, " +
+                $"textBefore='{e.title?.text}', " +
+                $"nameField='{r.Name}', peak={r.PeekObjects}");
 
             if (r.CPU_Curve != null)
                 e.cpuImage.texture = CurveTextureUtil.CurveToTexture(

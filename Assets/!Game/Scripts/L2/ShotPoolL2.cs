@@ -10,6 +10,7 @@ public class ShotPoolL2 : MonoBehaviour
     ObjectPool<ShotL2> _pool;
 
     public int Used;
+    public int Peek;
 
     void Awake()
     {
@@ -40,6 +41,8 @@ public class ShotPoolL2 : MonoBehaviour
     {
         shot.gameObject.SetActive(true);
         Used++;
+        if (Used > Peek) Peek = Used;
+        Demo.Instance.SetPeekObjects(Peek);
     }
 
     void OnRelease(ShotL2 shot)
@@ -53,7 +56,6 @@ public class ShotPoolL2 : MonoBehaviour
         Destroy(shot.gameObject);
     }
 
-    // Public API
     public ShotL2 GetShot() => _pool.Get();
     public void ReturnShot(ShotL2 shot) => _pool.Release(shot);
 }

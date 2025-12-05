@@ -43,6 +43,7 @@ public class Demo : MonoBehaviour
         Current.PeekObjects = 0;
         Current.CPU_Curve = new AnimationCurve();
         Current.GPU_Curve = new AnimationCurve();
+        Current.Name = name;
     }
 
     public void SetPeekObjects(int count)
