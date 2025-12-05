@@ -56,8 +56,11 @@ public class ShotSystemL3 : MonoBehaviour
 
     public void Update()
     {
+
+        ReplaceIndexCount = 0;
+
         // Update shot positions and lifetimes, Mark for removal;
-        for(int i = 0; i < Count; i++)
+        for (int i = 0; i < Count; i++)
         {
             Shots[i].TimeRemaining -= Time.deltaTime;
             if (Shots[i].TimeRemaining <= 0f)

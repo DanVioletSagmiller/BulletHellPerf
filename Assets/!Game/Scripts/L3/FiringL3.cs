@@ -9,6 +9,7 @@ public class FiringL3 : MonoBehaviour
     private float timer = 0f;
 
     public AnimationCurve DistanceByYAngle;
+    public float CheckAngle = 1f;
 
 
     void Update()

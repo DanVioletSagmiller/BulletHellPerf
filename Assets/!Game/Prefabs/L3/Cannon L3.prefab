@@ -129,7 +129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7976707336750210184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0039b043a9d16584587722354c6d8b8d, type: 3}
+  m_Script: {fileID: 11500000, guid: eb5ed2f1ee3d0ef40920b173d143078f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurretSweep
   turret: {fileID: 1426106744402238215}
@@ -146,12 +146,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 7976707336750210184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6ab365059278db4badac0b8ef07cd97, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a29ba1a23a42c145a271bf4c75c9cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Firing
   Frequency: 0.1
   Prefab: {fileID: 2731126981463363007, guid: ee9ad0a40a01e3a469267492039252bd, type: 3}
   FiringPoint: {fileID: 8575086433046392228}
+  DistanceByYAngle:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CheckAngle: 0.1
 --- !u!1 &8152429121159557174
 GameObject:
   m_ObjectHideFlags: 0

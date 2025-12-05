@@ -9,7 +9,7 @@ public class DemoResultsUI : MonoBehaviour
     public RectTransform panel;
     public Font Font;
     [Header("Update")]
-    public float refreshInterval = 0.1f;
+    public float refreshInterval = 2f;
 
     [Header("Curve Textures")]
     public int curveWidth = 280;
@@ -187,6 +187,7 @@ public class DemoResultsUI : MonoBehaviour
     {
         if (pixelMemory == null || pixelMemory.Length != curveWidth * curveHeight)
             pixelMemory = new Color[curveWidth * curveHeight];
+
         foreach (var kv in entries)
         {
             var e = kv.Value;

@@ -251,7 +251,7 @@ MonoBehaviour:
   demo: {fileID: 161950432}
   panel: {fileID: 1543858648}
   Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-  refreshInterval: 0.1
+  refreshInterval: 2
   curveWidth: 280
   curveHeight: 40
   backgroundColor: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
