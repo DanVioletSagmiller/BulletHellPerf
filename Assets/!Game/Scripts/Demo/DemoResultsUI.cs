@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Demo))]
@@ -8,8 +9,6 @@ public class DemoResultsUI : MonoBehaviour
     public Demo demo;
     public RectTransform panel;
     public Font Font;
-    [Header("Update")]
-    public float refreshInterval = 2f;
 
     [Header("Curve Textures")]
     public int curveWidth = 280;
@@ -32,7 +31,6 @@ public class DemoResultsUI : MonoBehaviour
     }
 
     readonly Dictionary<string, Entry> entries = new Dictionary<string, Entry>();
-    float timer;
     private Color[] pixelMemory;
 
     void Awake()
@@ -65,12 +63,14 @@ public class DemoResultsUI : MonoBehaviour
     {
         if (panel == null || demo == null) return;
 
-        timer += Time.unscaledDeltaTime;
-        if (timer < refreshInterval) return;
-        timer = 0f;
 
-        RefreshEntries();
-        UpdateEntries();
+        if (true || Input.GetKeyDown(KeyCode.Space))
+        {
+            RefreshEntries();
+            UpdateEntries();
+        }
+
+
     }
 
     void RefreshEntries()
@@ -194,23 +194,16 @@ public class DemoResultsUI : MonoBehaviour
             var r = e.results;
             if (r == null) continue;
 
-            r.AverageCPU = AverageOfCurve(r.CPU_Curve);
-            r.AverageGPU = AverageOfCurve(r.GPU_Curve);
+            r.AverageCPU = AverageOfCurve(r.CPU);
+            r.AverageGPU = AverageOfCurve(r.GPU);
 
             e.title.text = $"{r.Name}  (Peak Objects: {r.PeekObjects})";
             e.cpuLabel.text = $"CPU Avg: {r.AverageCPU:0.00} ms";
             e.gpuLabel.text = $"GPU Avg: {r.AverageGPU:0.00} ms";
 
-            // DEBUG:
-            Debug.Log(
-                $"Entry '{kv.Key}': titleGO={e.title?.gameObject.name}, " +
-                $"active={e.title?.gameObject.activeInHierarchy}, " +
-                $"textBefore='{e.title?.text}', " +
-                $"nameField='{r.Name}', peak={r.PeekObjects}");
-
-            if (r.CPU_Curve != null)
-                e.cpuImage.texture = CurveTextureUtil.CurveToTexture(
-                    r.CPU_Curve,
+            if (r.CPU != null)
+                e.cpuImage.texture = CurveTextureUtil.FloatRingToTexture(
+                    r.CPU,
                     curveWidth,
                     curveHeight,
                     backgroundColor,
@@ -218,9 +211,9 @@ public class DemoResultsUI : MonoBehaviour
                     tex: e.cpuImage.texture as Texture2D,
                     pixels: pixelMemory);
 
-            if (r.GPU_Curve != null)
-                e.gpuImage.texture = CurveTextureUtil.CurveToTexture(
-                    r.GPU_Curve,
+            if (r.GPU != null)
+                e.gpuImage.texture = CurveTextureUtil.FloatRingToTexture(
+                    r.GPU,
                     curveWidth,
                     curveHeight,
                     backgroundColor,
@@ -230,17 +223,10 @@ public class DemoResultsUI : MonoBehaviour
         }
     }
 
-    public static float AverageOfCurve(AnimationCurve curve)
+    public static float AverageOfCurve(RingBuffer<float> floatRing)
     {
-        if (curve == null || curve.keys == null || curve.keys.Length == 0)
-            return 0f;
-
         float sum = 0f;
-        var keys = curve.keys;
-
-        for (int i = 0; i < keys.Length; i++)
-            sum += keys[i].value;
-
-        return sum / keys.Length;
+        for(int i = 0; i < floatRing.Count; i++) sum += floatRing[i];
+        return sum / floatRing.Count;
     }
 }

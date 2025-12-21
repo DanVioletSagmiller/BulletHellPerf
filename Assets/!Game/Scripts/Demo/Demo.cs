@@ -13,8 +13,8 @@ public class Demo : MonoBehaviour
         public int PeekObjects;
         public float AverageCPU;
         public float AverageGPU;
-        public AnimationCurve CPU_Curve;
-        public AnimationCurve GPU_Curve;
+        public RingBuffer<float> CPU;
+        public RingBuffer<float> GPU;
     }
 
     // Assign this in the inspector (panel on your canvas, ~300px wide)
@@ -41,8 +41,8 @@ public class Demo : MonoBehaviour
         Current.AverageCPU = 0;
         Current.AverageGPU = 0;
         Current.PeekObjects = 0;
-        Current.CPU_Curve = new AnimationCurve();
-        Current.GPU_Curve = new AnimationCurve();
+        Current.CPU = new RingBuffer<float>(280);
+        Current.GPU = new RingBuffer<float>(280);
         Current.Name = name;
     }
 
@@ -88,10 +88,7 @@ public class Demo : MonoBehaviour
 
         var ft = _frameTimings[0];
 
-        Current.CPU_Curve.AddKey(Time.time, (float)ft.cpuFrameTime);
-        Current.GPU_Curve.AddKey(Time.time, (float)ft.gpuFrameTime);
-
-        Current.AverageCPU = (Current.AverageCPU + (float)ft.cpuFrameTime) / 2f;
-        Current.AverageGPU = (Current.AverageGPU + (float)ft.gpuFrameTime) / 2f;
+        Current.CPU.Add((float)ft.cpuFrameTime);
+        Current.GPU.Add((float)ft.gpuFrameTime);
     }
 }

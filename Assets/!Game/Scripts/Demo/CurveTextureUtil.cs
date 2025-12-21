@@ -90,6 +90,83 @@ public static class CurveTextureUtil
         return tex;
     }
 
+    public static Texture2D FloatRingToTexture(
+        RingBuffer<float> samples,
+        int width,
+        int height,
+        Color background,
+        Color curveColor,
+        float paddingPercent = 0.05f,
+        Texture2D tex = null,
+        Color[] pixels = null)
+    {
+        if (samples == null || samples.Count == 0)
+            return MakeSolid(width, height, background);
+
+        if (tex == null) tex = new Texture2D(width, height, TextureFormat.RGBA32, false)
+        {
+            wrapMode = TextureWrapMode.Clamp,
+            filterMode = FilterMode.Bilinear
+        };
+
+        if (pixels == null) pixels = new Color[width * height];
+        for (int i = 0; i < pixels.Length; i++)
+            pixels[i] = background;
+
+        int count = samples.Count;
+
+        // --- find value range ---
+        float vMin = samples[0];
+        float vMax = vMin;
+        for (int i = 1; i < count; i++)
+        {
+            float v = samples[i];
+            if (v < vMin) vMin = v;
+            if (v > vMax) vMax = v;
+        }
+
+        float vRange = Mathf.Max(Mathf.Epsilon, vMax - vMin);
+        float pad = vRange * paddingPercent;
+        vMin -= pad;
+        vMax += pad;
+        vRange = vMax - vMin;
+
+        int Index(int x, int y) => y * width + x;
+
+        int prevY = -1;
+
+        // --- draw directly from samples ---
+        for (int x = 0; x < count; x++)
+        {
+            float v = samples[x];
+            float vNorm = Mathf.Clamp01((v - vMin) / vRange);
+            int y = Mathf.RoundToInt(vNorm * (height - 1));
+
+            if (prevY >= 0)
+            {
+                int step = y >= prevY ? 1 : -1;
+                for (int yy = prevY; yy != y + step; yy += step)
+                {
+                    if ((uint)yy < (uint)height)
+                        pixels[Index(x, yy)] = curveColor;
+                }
+            }
+            else
+            {
+                if ((uint)y < (uint)height)
+                    pixels[Index(x, y)] = curveColor;
+            }
+
+            prevY = y;
+        }
+
+        tex.SetPixels(pixels);
+        tex.Apply();
+        return tex;
+    }
+
+
+
     static Texture2D MakeSolid(int width, int height, Color c)
     {
         var tex = new Texture2D(width, height, TextureFormat.RGBA32, false)

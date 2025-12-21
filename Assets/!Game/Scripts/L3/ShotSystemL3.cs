@@ -21,6 +21,7 @@ public class ShotSystemL3 : MonoBehaviour
 
     public int Capacity = 1024;
     public int Count = 0;
+    private int Peek = 0;
 
 
     private int ReplaceIndexCount = 0;
@@ -52,7 +53,8 @@ public class ShotSystemL3 : MonoBehaviour
         ShotTransforms[Count] = Matrix4x4.TRS(position, rotation, Scale);
 
         Count++;
-        Demo.Instance.SetPeekObjects(Count);
+        if (Count > Peek) Peek = Count;
+        Demo.Instance.SetPeekObjects(Peek);
     }
 
     public void Update()
@@ -64,13 +66,15 @@ public class ShotSystemL3 : MonoBehaviour
         for (int i = 0; i < Count; i++)
         {
             Shots[i].TimeRemaining -= Time.deltaTime;
+            Vector3 position = ShotTransforms[i].GetColumn(3);
             if (Shots[i].TimeRemaining <= 0f)
             {
                 ReplacementIndexes[ReplaceIndexCount++] = (Int16)i;
             }
             else
             {
-                Vector3 position = ShotTransforms[i].GetColumn(3);
+
+                
                 position += Shots[i].Velocity * Time.deltaTime;
                 ShotTransforms[i].SetColumn(3, new Vector4(position.x, position.y, position.z, 1f));
             }
