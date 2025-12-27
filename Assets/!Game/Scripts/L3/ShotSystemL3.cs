@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ShotSystemL3 : MonoBehaviour
 {
@@ -73,8 +74,6 @@ public class ShotSystemL3 : MonoBehaviour
             }
             else
             {
-
-                
                 position += Shots[i].Velocity * Time.deltaTime;
                 ShotTransforms[i].SetColumn(3, new Vector4(position.x, position.y, position.z, 1f));
             }
@@ -93,6 +92,7 @@ public class ShotSystemL3 : MonoBehaviour
             }
         }
 
+        // Draw it all
         Graphics.DrawMeshInstanced(
             ShotMesh,
             0,
